@@ -21,7 +21,7 @@ customize:
         author_title: Designer & Programmer
         location: Chengdu, China
         follow: https://github.com/zthxxx/
-    highlight: Idea
+    highlight: monokai
     sidebar: left # sidebar position, options: left, right
     category_perExpand: false # enable article categories list per expanding
     thumbnail: true # enable posts thumbnail, options: true, false
