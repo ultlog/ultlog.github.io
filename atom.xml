@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://ultlog.github.io/"/>
-  <updated>2020-07-19T10:19:56.327Z</updated>
+  <updated>2020-07-19T10:27:50.483Z</updated>
   <id>http://ultlog.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://ultlog.github.io/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v1-0-0/"/>
     <id>http://ultlog.github.io/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v1-0-0/</id>
     <published>2020-07-19T06:59:42.000Z</published>
-    <updated>2020-07-19T10:19:56.327Z</updated>
+    <updated>2020-07-19T10:27:50.483Z</updated>
     
     <summary type="html">
     
@@ -40,7 +40,7 @@
     <link href="http://ultlog.github.io/2020/07/19/index/"/>
     <id>http://ultlog.github.io/2020/07/19/index/</id>
     <published>2020-07-19T06:19:01.000Z</published>
-    <updated>2020-07-19T10:19:56.327Z</updated>
+    <updated>2020-07-19T10:27:50.483Z</updated>
     
     <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>ultlog是一个日志收集，过滤，展示的系统。<br>基于高性能地<a href="https://www.elastic.co/cn/cloud/?elektra=home&storm=sub1" target="_blank" rel="external nofollow noopener noreferrer">Elasticsearch</a>以及<a href="https://github.com/qos-ch/logback" target="_blank" rel="external nofollow noopener noreferrer">logback</a>等java框架，可以快速地对线上日志数据进行收集，并且提供ula页面进行日志地展示。<br>相比于原始地日志系统/框架，ultlog有如下优势：</p><ul><li>分布式系统日志能够地统一收集</li><li>避免了登录虚拟机/跳板机查询日志</li><li>可以通过时间或关键字进行日志检索，省去了编写查询语句的时间<br><a href="#开始使用">开始使用</a></li></ul><h1 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h1><h2 id="日志数据流转"><a href="#日志数据流转" class="headerlink" title="日志数据流转"></a>日志数据流转</h2><img src="/2020/07/19/index/ultlog.png" class title="ultlog日志数据流转图:vi&#x2F;vim-cheat-sheet"><h2 id="searcher"><a href="#searcher" class="headerlink" title="searcher"></a>searcher</h2><p>searcher为ultlog系统日志收集程序。通过对系统中指定文件夹进行监控，实时获取目标文件中的日志数据，并且将日志发送到<a href="#ula">ula</a>系统。</p><h2 id="collector"><a href="#collector" class="headerlink" title="collector"></a>collector</h2><p>collector是基于logback开发的日志收集组件，适用于使用logback日志框架的系统。collector通过对logback框架中的appender接口扩展而将收集到的日志发送到<a href="#ula">ula</a>系统。相比于searcher，<br>collector能够适应更改多变的日志格式，并且在部署不需要编写额外的脚本。</p><h2 id="ula"><a href="#ula" class="headerlink" title="ula"></a>ula</h2><p>ula为ultlog系统中的日志与网络请求处理服务，收集到的日志通过ula存储进Elasticsearch数据库，并且通过Restful风格的接口对外提供查询功能。</p><h2 id="ulu"><a href="#ulu" class="headerlink" title="ulu"></a>ulu</h2><p>ulu为ultlog系统日志展示程序。使用vue编写。</p><h1 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h1><p>(开始使用)[]</p><h1 id="未来规划"><a href="#未来规划" class="headerlink" title="未来规划"></a>未来规划</h1>]]></content>
     
