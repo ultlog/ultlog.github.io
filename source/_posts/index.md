@@ -20,13 +20,13 @@ ultlog是一个日志收集，过滤，展示的系统。
 searcher为ultlog系统日志收集程序。通过对系统中指定文件夹进行监控，实时获取目标文件中的日志数据，并且将日志发送到[ula](#ula)系统。
 ## collector
 collector是基于logback开发的日志收集组件，适用于使用logback日志框架的系统。collector通过对logback框架中的appender接口扩展而将收集到的日志发送到[ula](#ula)系统。相比于searcher，
-collector能够适应更改多变的日志格式，并且在部署不需要编写额外的脚本。
+collector能够适应更改多变的日志格式，并且在部署时不需要编写额外的脚本。
 
 ## ula
 ula为ultlog系统中的日志与网络请求处理服务，收集到的日志通过ula存储进Elasticsearch数据库，并且通过Restful风格的接口对外提供查询功能。
 
 ## ulu
-ulu为ultlog系统日志展示程序。使用vue编写。
+ulu为ultlog系统日志展示程序。可以通过系统名称，日志产生时间，日志信息等多个维度进行日志的查询。
 
 # 开始使用
 
