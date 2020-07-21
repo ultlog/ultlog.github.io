@@ -10,6 +10,9 @@ ultlog是一个日志收集，过滤，展示的系统。
 - 分布式系统日志能够地统一收集
 - 避免了登录虚拟机/跳板机查询日志
 - 可以通过时间或关键字进行日志检索，省去了编写查询语句的时间
+- 可以以服务/模块/系统唯一标识等属性区分日志，方便微服务架构下日志的准确查找
+
+
 [开始使用](#开始使用)
 
 # 架构
@@ -17,7 +20,10 @@ ultlog是一个日志收集，过滤，展示的系统。
 {% asset_img ultlog.png "ultlog日志数据流转图:vi/vim-cheat-sheet" %}
 
 ## searcher
-searcher为ultlog系统日志收集程序。通过对系统中指定文件夹进行监控，实时获取目标文件中的日志数据，并且将日志发送到[ula](#ula)系统。
+
+searcher 是ultlog系统中收集日志的一个程序。通过对系统中日志文件的监控，实时的将产生的日志发送到ula中。
+与[collector](https://github.com/ultlog/collector)不同，searcher不需要在工程中集成，转而在操作系统中集成。
+因此一些非基于logback的java项目（非常少）或非java项目也可以通过修改日志的格式而将日志托管给ultlog，享受ultlog带来的便利。
 ## collector
 collector是基于logback开发的日志收集组件，适用于使用logback日志框架的系统。collector通过对logback框架中的appender接口扩展而将收集到的日志发送到[ula](#ula)系统。相比于searcher，
 collector能够适应更改多变的日志格式，并且在部署时不需要编写额外的脚本。
