@@ -1,5 +1,5 @@
 ---
-title: 关于ultlog
+title: ultlog
 date: 2020-07-19 14:19:01
 tags:
 ---
@@ -36,5 +36,10 @@ ulu为ultlog系统日志展示程序。可以通过系统名称，日志产生�
 
 # 开始使用
 
-(开始使用)[]
+[ula部署说明](/2020/07/26/系统说明/ula/ula/)
+[ulu部署说明](/2020/07/26/系统说明/ulu/ulu/)
+[collector部署说明](/2020/07/26/系统说明/collector/collector/)
+[searcher部署说明](/2020/07/26/系统说明/searcher/searcher/)
+
 # 未来规划
+更多新功能正在开发，欢迎通过[未来规划](/2020/07/26/版本变更/feature/)查阅。
