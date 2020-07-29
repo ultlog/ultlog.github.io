@@ -5,9 +5,9 @@
   <subtitle>ultlog docs</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://ultlog.github.io/"/>
-  <updated>2020-07-21T13:50:55.729Z</updated>
-  <id>http://ultlog.github.io/</id>
+  <link href="http://ultlog.com/"/>
+  <updated>2020-07-29T13:48:34.721Z</updated>
+  <id>http://ultlog.com/</id>
   
   <author>
     <name>will</name>
@@ -17,82 +17,194 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
-    <link href="http://ultlog.github.io/2020/07/21/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/collector/collector/"/>
-    <id>http://ultlog.github.io/2020/07/21/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/collector/collector/</id>
-    <published>2020-07-21T13:50:55.729Z</published>
-    <updated>2020-07-21T13:50:55.729Z</updated>
+    <title>ulu</title>
+    <link href="http://ultlog.com/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/ulu/ulu/"/>
+    <id>http://ultlog.com/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/ulu/ulu/</id>
+    <published>2020-07-26T12:06:42.000Z</published>
+    <updated>2020-07-29T13:48:34.721Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>ulu全称未ultlog-ui，是ultlog系统中展示日志的web程序。</p><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h4 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h4><p>点击<a href="https://github.com/ultlog/ulu/releases" target="_blank" rel="external nofollow noopener noreferrer">此处</a>下载。</p><p><code>如果部署在windows系统，可以选择下载ulu-nginx，其自带一个免安装版本的nginx。</code></p><h4 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h4><p>将下载的文件解压到nginx的html路径下，目录结构为<br><code>{base_path}/nginx/html/index.html</code> 和 <code>{base_path}/nginx/html/static</code></p><p>修改nginx配置文件中的反向代理配置，添加如下代码</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ^~ &#x2F;api &#123;</span><br><span class="line">    proxy_pass http:&#x2F;&#x2F;&#123;ula-host&#125;:&#123;ula-ip&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>将其中ula-ip/port替换为ula服务部署的地址和端口</p><h4 id="启动nginx"><a href="#启动nginx" class="headerlink" title="启动nginx"></a>启动nginx</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start nginx</span><br></pre></td></tr></table></figure><h2 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h2><p>更多关于ulu的信息可以访问<a href="http://ultlog.com">ultlog文档中心</a>查阅。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;ulu全称未ultlog-ui，是ultlog系统中展示日志的web程序。&lt;/p&gt;
+&lt;h2 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; cl
+      
+    
+    </summary>
+    
+    
+      <category term="系统说明" scheme="http://ultlog.com/categories/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/"/>
+    
+      <category term="ulu" scheme="http://ultlog.com/categories/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/ulu/"/>
+    
+    
+      <category term="ulu" scheme="http://ultlog.com/tags/ulu/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ula</title>
+    <link href="http://ultlog.com/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/ula/ula/"/>
+    <id>http://ultlog.com/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/ula/ula/</id>
+    <published>2020-07-26T12:04:42.000Z</published>
+    <updated>2020-07-29T13:48:34.721Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="ula"><a href="#ula" class="headerlink" title="ula"></a>ula</h1><h2 id="前置"><a href="#前置" class="headerlink" title="前置"></a>前置</h2><p>需要7.x版本的<a href="https://www.elastic.co/" target="_blank" rel="external nofollow noopener noreferrer">Elasticsearch</a></p><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>点击<a href="https://github.com/ultlog/ula/releases" target="_blank" rel="external nofollow noopener noreferrer">此处</a>下载ula-0.0.1.jar</p><h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar -D"ultlog.es.address.host=&#123;es-ip&#125;" -D"ultlog.es.address.port=&#123;es-port&#125;"   ula-0.0.1.jar</span><br></pre></td></tr></table></figure><p>替换其中es-ip与es-port</p><h3 id="个性化"><a href="#个性化" class="headerlink" title="个性化"></a>个性化</h3><p>如果需要修改端口ip等配置信息可以在启动项加入</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dspring.port=8888</span><br></pre></td></tr></table></figure><p>更建议创建一个配置文件在同级目录，修改配置更方便。</p><h2 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h2><p>更多关于ulu的信息可以访问<a href="http://ultlog.com">ultlog文档中心</a>查阅。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;ula&quot;&gt;&lt;a href=&quot;#ula&quot; class=&quot;headerlink&quot; title=&quot;ula&quot;&gt;&lt;/a&gt;ula&lt;/h1&gt;&lt;h2 id=&quot;前置&quot;&gt;&lt;a href=&quot;#前置&quot; class=&quot;headerlink&quot; title=&quot;前置&quot;&gt;&lt;/a&gt;前置&lt;/h2&gt;&lt;p
+      
+    
+    </summary>
+    
+    
+      <category term="系统说明" scheme="http://ultlog.com/categories/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/"/>
+    
+      <category term="ula" scheme="http://ultlog.com/categories/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/ula/"/>
+    
+    
+      <category term="ula" scheme="http://ultlog.com/tags/ula/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>searcher</title>
+    <link href="http://ultlog.com/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/searcher/searcher/"/>
+    <id>http://ultlog.com/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/searcher/searcher/</id>
+    <published>2020-07-26T12:02:42.000Z</published>
+    <updated>2020-07-29T13:48:34.721Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>searcher 是ultlog系统中收集日志的一个程序。通过对系统中日志文件的监控，实时的将产生的日志发送到ula中。<br>与<a href="https://github.com/ultlog/collector" target="_blank" rel="external nofollow noopener noreferrer">collector</a>不同，searcher不需要在工程中集成，转而在操作系统中集成。<br>因此一些非基于logback的java项目（非常少）或非java项目也可以通过修改日志的格式而将日志托管给ultlog，享受ultlog带来的便利。</p><h2 id="前置"><a href="#前置" class="headerlink" title="前置"></a>前置</h2><p>searcher使用java编写，因此在应用searcher的操作系统上需要<a href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html" target="_blank" rel="external nofollow noopener noreferrer">jdk8</a>以上的环境，若系统中没有以上环境则可以使用自带jdk的searcher包进行部署。</p><p>建议将执行脚本下载到内网，通过minio，ftp或http服务挂载，并以此编写自动集成脚本，具体可见<a href="#自动集成实践">自动集成实践</a>。</p><p>如果有大量环境需要集成建议查看<a href="#自动集成实践">自动集成实践</a>来快速编写自动集成脚本。</p><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="程序配置"><a href="#程序配置" class="headerlink" title="程序配置"></a>程序配置</h3><p>将要应用searcher的程序的logback日志格式应如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%d&#123;yyyy-MM-dd HH:mm:ss&#125; [%-5level] [%-5thread] %logger&#123;20&#125; - %msg%n&lt;&#x2F;pattern&gt;</span><br></pre></td></tr></table></figure><p>如果非logback项目或非java项目应将日志格式调整为如此：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2020-07-21 09:16:37 [ERROR] [pool-420-thread-7] c.t.g.h.HttpConnectionPoolUtil - test error</span><br><span class="line">java.lang.RuntimeException: test error</span><br><span class="line">at com.example.demo.DemoApplicationTests.contextLoads(DemoApplicationTests.java:21)</span><br><span class="line">....</span><br></pre></td></tr></table></figure><h3 id="选择软件包"><a href="#选择软件包" class="headerlink" title="选择软件包"></a>选择软件包</h3><table><thead><tr><th>环境</th><th>软件包</th></tr></thead><tbody><tr><td>&lt;  jdk 1.8</td><td><a href>searcher_jdk.tar.gz</a></td></tr><tr><td>&gt;=  jdk 1.8</td><td><a href>searcher.tar.gz</a></td></tr><tr><td>无jdk</td><td><a href>searcher_jdk.tar.gz</a></td></tr></tbody></table><h3 id="手动-单机集成"><a href="#手动-单机集成" class="headerlink" title="手动/单机集成"></a>手动/单机集成</h3><h4 id="docker-linux"><a href="#docker-linux" class="headerlink" title="docker linux"></a>docker linux</h4><ul><li>使用exec等命令进入docker镜像</li><li>将下载好的软件包传入（可以在镜像内使用curl等命令进行下载）</li><li>解压文件</li><li>执行 sh searcher.sh <a href="#配置项说明">{args}</a></li></ul><h4 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h4><ul><li>将下载好的软件包传入 可以在镜像内使用curl等命令进行下载</li><li>解压文件</li><li>执行 sh searcher.sh <a href="#配置项说明">{args}</a><h4 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h4>修改{searcher path}/application.yml，正确填写其中配置项<br>执行语句启动<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar searcher.jar</span><br></pre></td></tr></table></figure>如果是非jdk8环境<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;searcher_path&#125;/java -jar searcher.jar</span><br></pre></td></tr></table></figure></li></ul><h3 id="自动集成实践"><a href="#自动集成实践" class="headerlink" title="自动集成实践"></a>自动集成实践</h3><h3 id="配置项说明"><a href="#配置项说明" class="headerlink" title="配置项说明"></a>配置项说明</h3><p>参数说明</p><h4 id="使用配置文件"><a href="#使用配置文件" class="headerlink" title="使用配置文件"></a>使用配置文件</h4><p>使用配置文件即为将软件包内部的配置文件进行修改，然后存放到需要集成searcher的系统某个地址下，通过参数指定路径即可</p><table><thead><tr><th>参数</th><th>说明</th><th>是否必填</th><th>默认值</th><th>实例</th></tr></thead><tbody><tr><td>-f , –file</td><td>配置文件的路径</td><td>√</td><td></td><td>/searcher/application.yml</td></tr><tr><td>#### 直接传参</td><td></td><td></td><td></td><td></td></tr></tbody></table><p>不使用配置文件直接通过以下参数启动searcher服务</p><table><thead><tr><th>参数</th><th>说明</th><th>是否必填</th><th>默认值</th><th>实例</th></tr></thead><tbody><tr><td>-p , –path</td><td>产生日志文件的路径</td><td>√</td><td></td><td>/logs/</td></tr><tr><td>–pattern</td><td>日志文件的关键字</td><td>√</td><td></td><td>error.log</td></tr><tr><td>–project</td><td>项目名称</td><td>√</td><td></td><td>ultlog</td></tr><tr><td>-m , –module</td><td>模块名称</td><td>√</td><td></td><td>searcher</td></tr><tr><td>–uuid</td><td>服务唯一属性</td><td>√</td><td></td><td>4RFS23Q</td></tr><tr><td>–max</td><td>同时监控的最多文件数</td><td>×</td><td>10</td><td>12</td></tr><tr><td>–level</td><td>收集日志的最低等级</td><td>×</td><td>INFO</td><td>WARN</td></tr><tr><td>-u , –ula</td><td>ula服务地址</td><td>√</td><td></td><td><a href="http://192.168.2.2:8080/" target="_blank" rel="external nofollow noopener noreferrer">http://192.168.2.2:8080/</a></td></tr></tbody></table>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;searcher 是ultlog系统中收集日志的一个程序。通过对系统中日志文件的监控，实时的将产生的日志发送到ula中。&lt;br&gt;与&lt;a hr
+      
+    
+    </summary>
+    
+    
+      <category term="系统说明" scheme="http://ultlog.com/categories/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/"/>
+    
+      <category term="searcher" scheme="http://ultlog.com/categories/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/searcher/"/>
+    
+    
+      <category term="searcher" scheme="http://ultlog.com/tags/searcher/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>未来规划</title>
+    <link href="http://ultlog.com/2020/07/26/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/feature/"/>
+    <id>http://ultlog.com/2020/07/26/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/feature/</id>
+    <published>2020-07-26T12:00:42.000Z</published>
+    <updated>2020-07-29T13:48:34.721Z</updated>
     
     <summary type="html">
     
     </summary>
     
     
-      <category term="系统说明" scheme="http://ultlog.github.io/categories/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/"/>
+      <category term="版本变更" scheme="http://ultlog.com/categories/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/"/>
     
-      <category term="collector" scheme="http://ultlog.github.io/categories/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/collector/"/>
     
+      <category term="version feature" scheme="http://ultlog.com/tags/version-feature/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>collector</title>
+    <link href="http://ultlog.com/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/collector/collector/"/>
+    <id>http://ultlog.com/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/collector/collector/</id>
+    <published>2020-07-26T12:00:42.000Z</published>
+    <updated>2020-07-29T13:48:34.721Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>collector是基于logback开发的日志收集组件，适用于使用logback日志框架的系统。collector通过对logback框架中的appender接口扩展而将收集到的日志发送到<a href="#ula">ula</a>系统。相比于searcher，<br>collector能够适应更改多变的日志格式，并且在部署时不需要编写额外的脚本。</p><h2 id="集成"><a href="#集成" class="headerlink" title="集成"></a>集成</h2><h3 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.ultlog<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>collector<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure><h3 id="集成-1"><a href="#集成-1" class="headerlink" title="集成"></a>集成</h3><p>在logback.xml/logback-test.xml等生效的logback配置文件中添加如下配置</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"ultlog"</span> <span class="attr">class</span>=<span class="string">"com.ultlog.collector.appender.UlaAppender"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"&#123;ula&#125;/api/v1/log"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"project"</span> <span class="attr">value</span>=<span class="string">"&#123;project&#125;"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"module"</span> <span class="attr">value</span>=<span class="string">"&#123;module&#125;"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"uuid"</span> <span class="attr">value</span>=<span class="string">"&#123;uuid&#125;"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"ERROR"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"ultlog"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure><h4 id="异步处理日志"><a href="#异步处理日志" class="headerlink" title="异步处理日志"></a>异步处理日志</h4><p>如果想使用异步appender可以采用logback文档中<a href="http://www.logback.cn/04%E7%AC%AC%E5%9B%9B%E7%AB%A0Appenders.html" target="_blank" rel="external nofollow noopener noreferrer">appender</a>文档中的AsyncAppender部分。</p><h4 id="配置项说明"><a href="#配置项说明" class="headerlink" title="配置项说明"></a>配置项说明</h4><table><thead><tr><th>配置项</th><th>说明</th></tr></thead><tbody><tr><td>ula</td><td>ula服务的地址</td></tr><tr><td>project</td><td>项目名称</td></tr><tr><td>module</td><td>模块名称（如果非微服务项目可以与project相等）</td></tr><tr><td>uuid</td><td>服务唯一属性</td></tr></tbody></table><h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><pre><code class="xml"><span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"ultlog"</span> <span class="attr">class</span>=<span class="string">"com.ultlog.collector.appender.AsyncEsAppender"</span>&gt;</span>    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"threadPoolProviderName"</span> <span class="attr">value</span>=<span class="string">"com.ultlog.collector.support.DefaultThreadPoolProvider"</span>/&gt;</span>    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"http://localhost:8080/api/v1/log"</span>/&gt;</span>    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"project"</span> <span class="attr">value</span>=<span class="string">"ula-test"</span>/&gt;</span>    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"module"</span> <span class="attr">value</span>=<span class="string">"ula-test"</span>/&gt;</span>    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"uuid"</span> <span class="attr">value</span>=<span class="string">"ula-test-uuid"</span>/&gt;</span><span class="tag">&lt;/<span class="name">appender</span>&gt;</span></code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;collector是基于logback开发的日志收集组件，适用于使用logback日志框架的系统。collector通过对logback框架
+      
+    
+    </summary>
+    
+    
+      <category term="系统说明" scheme="http://ultlog.com/categories/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/"/>
+    
+      <category term="collector" scheme="http://ultlog.com/categories/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/collector/"/>
+    
+    
+      <category term="collector" scheme="http://ultlog.com/tags/collector/"/>
     
   </entry>
   
   <entry>
     <title>v0.0.1</title>
-    <link href="http://ultlog.github.io/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v0-0-1/"/>
-    <id>http://ultlog.github.io/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v0-0-1/</id>
+    <link href="http://ultlog.com/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v0-0-1/"/>
+    <id>http://ultlog.com/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v0-0-1/</id>
     <published>2020-07-19T06:59:42.000Z</published>
-    <updated>2020-07-21T13:50:55.729Z</updated>
+    <updated>2020-07-29T13:48:34.721Z</updated>
     
-    <content type="html"><![CDATA[<p>#功能新增</p><ul><li>增加了collector</li><li>增加了ulu</li><li>增加了ulu</li><li>通过collector完成了基本的日志收集与展示功能<br>#功能变动<br>无<br>#解决问题<br>无<br>#其他<br>该版本为预览版本，仅作功能演示用，因此仍有功能亟待开发，部分低优先级问题将在v1.0.0版本统一解决。</li></ul>]]></content>
+    <content type="html"><![CDATA[<h1 id="功能新增"><a href="#功能新增" class="headerlink" title="功能新增"></a>功能新增</h1><ul><li>增加了collector</li><li>增加了ulu</li><li>增加了ulu</li><li>通过collector完成了基本的日志收集与展示功能</li></ul><h1 id="功能变动"><a href="#功能变动" class="headerlink" title="功能变动"></a>功能变动</h1><p>无</p><h1 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h1><p>无</p><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>该版本为预览版本，仅作功能演示用，因此仍有功能亟待开发，部分低优先级问题将在v1.0.0版本统一解决。</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;#功能新增&lt;/p&gt;
-&lt;ul&gt;
+        &lt;h1 id=&quot;功能新增&quot;&gt;&lt;a href=&quot;#功能新增&quot; class=&quot;headerlink&quot; title=&quot;功能新增&quot;&gt;&lt;/a&gt;功能新增&lt;/h1&gt;&lt;ul&gt;
 &lt;li&gt;增加了collector&lt;/li&gt;
 &lt;li&gt;增加了ulu&lt;/li&gt;
 &lt;li&gt;增加了ulu&lt;/li&gt;
-&lt;li&gt;通过collector完成了基本的日志收集与展示功能&lt;br&gt;#功能变动&lt;br&gt;无&lt;br&gt;#解决问题&lt;br&gt;无&lt;br&gt;#其他&lt;br
+&lt;li&gt;通过
       
     
     </summary>
     
     
-      <category term="版本变更" scheme="http://ultlog.github.io/categories/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/"/>
+      <category term="版本变更" scheme="http://ultlog.com/categories/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/"/>
     
     
-      <category term="version" scheme="http://ultlog.github.io/tags/version/"/>
+      <category term="version" scheme="http://ultlog.com/tags/version/"/>
     
   </entry>
   
   <entry>
     <title>v1.0.0</title>
-    <link href="http://ultlog.github.io/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v1-0-0/"/>
-    <id>http://ultlog.github.io/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v1-0-0/</id>
+    <link href="http://ultlog.com/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v1-0-0/"/>
+    <id>http://ultlog.com/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v1-0-0/</id>
     <published>2020-07-19T06:59:42.000Z</published>
-    <updated>2020-07-21T13:50:55.729Z</updated>
+    <updated>2020-07-29T13:48:34.721Z</updated>
     
     <summary type="html">
     
     </summary>
     
     
-      <category term="版本变更" scheme="http://ultlog.github.io/categories/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/"/>
+      <category term="版本变更" scheme="http://ultlog.com/categories/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/"/>
     
     
-      <category term="version" scheme="http://ultlog.github.io/tags/version/"/>
+      <category term="version" scheme="http://ultlog.com/tags/version/"/>
     
   </entry>
   
   <entry>
-    <title>关于ultlog</title>
-    <link href="http://ultlog.github.io/2020/07/19/index/"/>
-    <id>http://ultlog.github.io/2020/07/19/index/</id>
+    <title>ultlog</title>
+    <link href="http://ultlog.com/2020/07/19/index/"/>
+    <id>http://ultlog.com/2020/07/19/index/</id>
     <published>2020-07-19T06:19:01.000Z</published>
-    <updated>2020-07-21T13:50:55.729Z</updated>
+    <updated>2020-07-29T13:48:34.721Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>ultlog是一个日志收集，过滤，展示的系统。<br>基于高性能地<a href="https://www.elastic.co/cn/cloud/?elektra=home&storm=sub1" target="_blank" rel="external nofollow noopener noreferrer">Elasticsearch</a>以及<a href="https://github.com/qos-ch/logback" target="_blank" rel="external nofollow noopener noreferrer">logback</a>等java框架，可以快速地对线上日志数据进行收集，并且提供ula页面进行日志地展示。<br>相比于原始地日志系统/框架，ultlog有如下优势：</p><ul><li>分布式系统日志能够地统一收集</li><li>避免了登录虚拟机/跳板机查询日志</li><li>可以通过时间或关键字进行日志检索，省去了编写查询语句的时间</li><li>可以以服务/模块/系统唯一标识等属性区分日志，方便微服务架构下日志的准确查找</li></ul><p><a href="#开始使用">开始使用</a></p><h1 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h1><h2 id="日志数据流转"><a href="#日志数据流转" class="headerlink" title="日志数据流转"></a>日志数据流转</h2><img src="/2020/07/19/index/ultlog.png" class title="ultlog日志数据流转图:vi&#x2F;vim-cheat-sheet"><h2 id="searcher"><a href="#searcher" class="headerlink" title="searcher"></a>searcher</h2><p>searcher 是ultlog系统中收集日志的一个程序。通过对系统中日志文件的监控，实时的将产生的日志发送到ula中。<br>与<a href="https://github.com/ultlog/collector" target="_blank" rel="external nofollow noopener noreferrer">collector</a>不同，searcher不需要在工程中集成，转而在操作系统中集成。<br>因此一些非基于logback的java项目（非常少）或非java项目也可以通过修改日志的格式而将日志托管给ultlog，享受ultlog带来的便利。</p><h2 id="collector"><a href="#collector" class="headerlink" title="collector"></a>collector</h2><p>collector是基于logback开发的日志收集组件，适用于使用logback日志框架的系统。collector通过对logback框架中的appender接口扩展而将收集到的日志发送到<a href="#ula">ula</a>系统。相比于searcher，<br>collector能够适应更改多变的日志格式，并且在部署时不需要编写额外的脚本。</p><h2 id="ula"><a href="#ula" class="headerlink" title="ula"></a>ula</h2><p>ula为ultlog系统中的日志与网络请求处理服务，收集到的日志通过ula存储进Elasticsearch数据库，并且通过Restful风格的接口对外提供查询功能。</p><h2 id="ulu"><a href="#ulu" class="headerlink" title="ulu"></a>ulu</h2><p>ulu为ultlog系统日志展示程序。可以通过系统名称，日志产生时间，日志信息等多个维度进行日志的查询。</p><h1 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h1><p>(开始使用)[]</p><h1 id="未来规划"><a href="#未来规划" class="headerlink" title="未来规划"></a>未来规划</h1>]]></content>
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>ultlog是一个日志收集，过滤，展示的系统。<br>基于高性能地<a href="https://www.elastic.co/cn/cloud/?elektra=home&storm=sub1" target="_blank" rel="external nofollow noopener noreferrer">Elasticsearch</a>以及<a href="https://github.com/qos-ch/logback" target="_blank" rel="external nofollow noopener noreferrer">logback</a>等java框架，可以快速地对线上日志数据进行收集，并且提供ula页面进行日志地展示。<br>相比于原始地日志系统/框架，ultlog有如下优势：</p><ul><li>分布式系统日志能够地统一收集</li><li>避免了登录虚拟机/跳板机查询日志</li><li>可以通过时间或关键字进行日志检索，省去了编写查询语句的时间</li><li>可以以服务/模块/系统唯一标识等属性区分日志，方便微服务架构下日志的准确查找</li></ul><p><a href="#开始使用">开始使用</a></p><h1 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h1><h2 id="日志数据流转"><a href="#日志数据流转" class="headerlink" title="日志数据流转"></a>日志数据流转</h2><img src="/2020/07/19/index/ultlog.png" class title="ultlog日志数据流转图:vi&#x2F;vim-cheat-sheet"><h2 id="searcher"><a href="#searcher" class="headerlink" title="searcher"></a>searcher</h2><p>searcher 是ultlog系统中收集日志的一个程序。通过对系统中日志文件的监控，实时的将产生的日志发送到ula中。<br>与<a href="https://github.com/ultlog/collector" target="_blank" rel="external nofollow noopener noreferrer">collector</a>不同，searcher不需要在工程中集成，转而在操作系统中集成。<br>因此一些非基于logback的java项目（非常少）或非java项目也可以通过修改日志的格式而将日志托管给ultlog，享受ultlog带来的便利。</p><h2 id="collector"><a href="#collector" class="headerlink" title="collector"></a>collector</h2><p>collector是基于logback开发的日志收集组件，适用于使用logback日志框架的系统。collector通过对logback框架中的appender接口扩展而将收集到的日志发送到<a href="#ula">ula</a>系统。相比于searcher，<br>collector能够适应更改多变的日志格式，并且在部署时不需要编写额外的脚本。</p><h2 id="ula"><a href="#ula" class="headerlink" title="ula"></a>ula</h2><p>ula为ultlog系统中的日志与网络请求处理服务，收集到的日志通过ula存储进Elasticsearch数据库，并且通过Restful风格的接口对外提供查询功能。</p><h2 id="ulu"><a href="#ulu" class="headerlink" title="ulu"></a>ulu</h2><p>ulu为ultlog系统日志展示程序。可以通过系统名称，日志产生时间，日志信息等多个维度进行日志的查询。</p><h1 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h1><p><a href="/2020/07/26/系统说明/ula/ula/">ula部署说明</a><br><a href="/2020/07/26/系统说明/ulu/ulu/">ulu部署说明</a><br><a href="/2020/07/26/系统说明/collector/collector/">collector部署说明</a><br><a href="/2020/07/26/系统说明/searcher/searcher/">searcher部署说明</a></p><h1 id="未来规划"><a href="#未来规划" class="headerlink" title="未来规划"></a>未来规划</h1><p>更多新功能正在开发，欢迎通过<a href="/2020/07/26/版本变更/feature/">未来规划</a>查阅。</p>]]></content>
     
     <summary type="html">
     
