@@ -54,27 +54,60 @@ at com.example.demo.DemoApplicationTests.contextLoads(DemoApplicationTests.java:
 - 将下载好的软件包传入 可以在镜像内使用curl等命令进行下载
 - 解压文件
 - 执行 sh searcher.sh [{args}](#配置项说明)
+
 #### windows
 修改{searcher path}/application.yml，正确填写其中配置项
 执行语句启动
-````shell script
+````shell
 java -jar searcher.jar
 ````
 如果是非jdk8环境
-````shell script
+````shell
 {searcher_path}/java -jar searcher.jar
 ````
 
 ### 自动集成实践
 
+自动集成提供docker环境文件的改造，如需在jenkins或其他平台集成可以参照此进行改造。
+
+#### 原DOCKERFILE
+````shell
+FROM java:8
+ADD demo.jar /demo.jar
+ENTRYPOINT ["java","jar","/demo.jar"]
+
+````
+#### 改造后
+在程序同级**.jar同级目录添加名称为start.sh的脚本（可以通过cp等命令移动到jar所在目录，下同），内容如下：
+````shell
+sh startSearcher.sh -f /opt/application.yml
+java -jar /demo.jar
+
+````
+在原jar目录添加文件
+- startSearcher.sh
+- application.yml
+
+修改DOCKERFILE
+
+````shell
+FROM java:8
+ADD demo.jar /demo.jar
+ADD startSearcher.sh /startSearcher.sh
+ADD application.yml /opt/application.yml
+ENTRYPOINT ["sh","start.sh"]
+
+````
+
 ### 配置项说明
-参数说明
 #### 使用配置文件
 使用配置文件即为将软件包内部的配置文件进行修改，然后存放到需要集成searcher的系统某个地址下，通过参数指定路径即可
 
 |  参数|   说明 |是否必填| 默认值| 实例
 | ------ | ------ | ------ | ------ | ------ | 
 | -f , --file | 配置文件的路径 | √ | | /searcher/application.yml
+
+
 #### 直接传参
 
 不使用配置文件直接通过以下参数启动searcher服务
@@ -89,4 +122,21 @@ java -jar searcher.jar
 | --max | 同时监控的最多文件数 |  × | 10 | 12|
 | --level | 收集日志的最低等级 | × | INFO | WARN| 
 | -u , --ula | ula服务地址 |√ | | http://192.168.2.2:8080/ | 
+
+#### 配置实例
+以下是测试时使用的配置文件，仅供参考
+````yaml
+ultlog:
+  searcher:
+    path: F:\Java\Workspace\ultlog\collector\logs
+    pattern: demo
+    max: 10
+    project: searcherTest
+    module: test
+    uuid: test
+    log:
+      level: INFO
+  ula:
+    url:  http://localhost:8080/
+````
 
