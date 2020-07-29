@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    
+    <title>性能测试 | ultlog</title>
+    
+    
+        <meta name="keywords" content="性能">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="前言本次性能测试有以下几点说明  仅针对ula服务进行查询测试。 测试的目标ula服务与elasticsearch服务都为默认配置。即二者启动时均未对连接数&#x2F;内存等进行调整。详见系统配置。 仅对ula中日志接口（&#x2F;api&#x2F;v1&#x2F;log）进行测试，该接口内部包含两次elasticsearch查询，加之日常使用极少深度分页，因此该接口在一定程度上能够作为测试基准。 本次性能测试的目标为满足五十人左右团">
+<meta property="og:type" content="article">
+<meta property="og:title" content="性能测试">
+<meta property="og:url" content="http://ultlog.com/2020/07/29/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/%E6%B5%8B%E8%AF%95/benchmark/index.html">
+<meta property="og:site_name" content="ultlog">
+<meta property="og:description" content="前言本次性能测试有以下几点说明  仅针对ula服务进行查询测试。 测试的目标ula服务与elasticsearch服务都为默认配置。即二者启动时均未对连接数&#x2F;内存等进行调整。详见系统配置。 仅对ula中日志接口（&#x2F;api&#x2F;v1&#x2F;log）进行测试，该接口内部包含两次elasticsearch查询，加之日常使用极少深度分页，因此该接口在一定程度上能够作为测试基准。 本次性能测试的目标为满足五十人左右团">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-29T14:09:01.000Z">
+<meta property="article:modified_time" content="2020-07-29T15:07:01.977Z">
+<meta property="article:author" content="will">
+<meta property="article:tag" content="性能">
+<meta name="twitter:card" content="summary">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="ultlog" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/favicon.ico">
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/open-sans/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    
+<script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.1"></head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">ultlog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>分类</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            版本变更
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v0-0-1/">v0.0.1</a></li>  <li class="file"><a href="/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v1-0-0/">v1.0.0</a></li>  <li class="file"><a href="/2020/07/26/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/feature/">未来规划</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            系统说明
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            collector
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/collector/collector/">collector</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            searcher
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/searcher/searcher/">searcher</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            ula
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/ula/ula/">ula</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            ulu
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/ulu/ulu/">ulu</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            测试
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file active"><a href="/2020/07/29/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/%E6%B5%8B%E8%AF%95/benchmark/">性能测试</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     <li class="file"><a href="/2020/07/19/index/">ultlog</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-系统说明/测试/benchmark" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/">系统说明</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/%E6%B5%8B%E8%AF%95/">测试</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/%E6%80%A7%E8%83%BD/" rel="tag">性能</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2020/07/29/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/%E6%B5%8B%E8%AF%95/benchmark/">
+            <time datetime="2020-07-29T14:09:01.000Z" itemprop="datePublished">2020-07-29</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href="https://github.com/ultlog/ultlog.github.io/raw/master/source/_posts/系统说明/测试/benchmark.md" target="_blank" rel="external nofollow noopener noreferrer"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/ultlog/ultlog.github.io/edit/master/source/_posts/系统说明/测试/benchmark.md" target="_blank" rel="external nofollow noopener noreferrer"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/ultlog/ultlog.github.io/commits/master/source/_posts/系统说明/测试/benchmark.md" target="_blank" rel="external nofollow noopener noreferrer"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            性能测试
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">文章目录</strong>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#系统配置"><span class="toc-number">2.</span> <span class="toc-text">系统配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ula"><span class="toc-number">2.1.</span> <span class="toc-text">ula</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#elasticsearch"><span class="toc-number">2.2.</span> <span class="toc-text">elasticsearch</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置"><span class="toc-number">2.2.1.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据量"><span class="toc-number">2.2.2.</span> <span class="toc-text">数据量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux"><span class="toc-number">2.3.</span> <span class="toc-text">linux</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#测试"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#测试工具"><span class="toc-number">3.1.</span> <span class="toc-text">测试工具</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#测试结果"><span class="toc-number">4.</span> <span class="toc-text">测试结果</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#测试报告"><span class="toc-number">4.1.</span> <span class="toc-text">测试报告</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出结果"><span class="toc-number">4.2.</span> <span class="toc-text">输出结果</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结论"><span class="toc-number">5.</span> <span class="toc-text">结论</span></a></li></ol>
+                </div>
+            
+        
+        
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本次性能测试有以下几点说明</p>
+<ul>
+<li>仅针对ula服务进行查询测试。</li>
+<li>测试的目标ula服务与elasticsearch服务都为默认配置。即二者启动时均未对连接数/内存等进行调整。详见<a href="#系统配置">系统配置</a>。</li>
+<li>仅对ula中日志接口（/api/v1/log）进行测试，该接口内部包含两次elasticsearch查询，加之日常使用极少深度分页，因此该接口在一定程度上能够作为测试基准。</li>
+<li>本次性能测试的目标为满足五十人左右团队使用时接口不会出现大于1000ms响应。</li>
+<li>经日常工作经验可知团队内同时使用ultlog的人数大约为1/10 - 1/5 ，因此取极限10绝对并发进行测试。</li>
+<li>本次测试的总请求次数设置为50*10，即10人各自连续调用服务50次，较大于日常使用ultlog查询日志时的实际情况，因此可以覆盖日常使用的极限值。</li>
+<li>本次测试的数据量为数日积累，大约在三百万左右。</li>
+</ul>
+<h1 id="系统配置"><a href="#系统配置" class="headerlink" title="系统配置"></a>系统配置</h1><p>在测试之前，待测试ula服务，elasticsearch服务，搭载服务的虚拟机的配置如下</p>
+<h2 id="ula"><a href="#ula" class="headerlink" title="ula"></a>ula</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmap -heap &#123;ula pid&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Heap Configuration:</span><br><span class="line">   MinHeapFreeRatio         &#x3D; 0</span><br><span class="line">   MaxHeapFreeRatio         &#x3D; 100</span><br><span class="line">   MaxHeapSize              &#x3D; 2065694720 (1970.0MB)</span><br><span class="line">   NewSize                  &#x3D; 42991616 (41.0MB)</span><br><span class="line">   MaxNewSize               &#x3D; 688390144 (656.5MB)</span><br><span class="line">   OldSize                  &#x3D; 87031808 (83.0MB)</span><br><span class="line">   NewRatio                 &#x3D; 2</span><br><span class="line">   SurvivorRatio            &#x3D; 8</span><br><span class="line">   MetaspaceSize            &#x3D; 21807104 (20.796875MB)</span><br><span class="line">   CompressedClassSpaceSize &#x3D; 1073741824 (1024.0MB)</span><br><span class="line">   MaxMetaspaceSize         &#x3D; 17592186044415 MB</span><br><span class="line">   G1HeapRegionSize         &#x3D; 0 (0.0MB)</span><br><span class="line"></span><br><span class="line">Heap Usage:</span><br><span class="line">PS Young Generation</span><br><span class="line">Eden Space:</span><br><span class="line">   capacity &#x3D; 30932992 (29.5MB)</span><br><span class="line">   used     &#x3D; 22519952 (21.476699829101562MB)</span><br><span class="line">   free     &#x3D; 8413040 (8.023300170898438MB)</span><br><span class="line">   72.80237230203919% used</span><br></pre></td></tr></table></figure>
+<p>更多参数可见<a href="https://github.com/ultlog/ula/tree/master/benchmark/ula_config" target="_blank" rel="external nofollow noopener noreferrer">ula_config</a></p>
+<h2 id="elasticsearch"><a href="#elasticsearch" class="headerlink" title="elasticsearch"></a>elasticsearch</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">jhsdb jmap --heap --pid &#123;elasticsearch pid&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Heap Configuration:</span><br><span class="line">   MinHeapFreeRatio         &#x3D; 40</span><br><span class="line">   MaxHeapFreeRatio         &#x3D; 70</span><br><span class="line">   MaxHeapSize              &#x3D; 1073741824 (1024.0MB)</span><br><span class="line">   NewSize                  &#x3D; 348913664 (332.75MB)</span><br><span class="line">   MaxNewSize               &#x3D; 348913664 (332.75MB)</span><br><span class="line">   OldSize                  &#x3D; 724828160 (691.25MB)</span><br><span class="line">   NewRatio                 &#x3D; 2</span><br><span class="line">   SurvivorRatio            &#x3D; 8</span><br><span class="line">   MetaspaceSize            &#x3D; 21807104 (20.796875MB)</span><br><span class="line">   CompressedClassSpaceSize &#x3D; 1073741824 (1024.0MB)</span><br><span class="line">   MaxMetaspaceSize         &#x3D; 17592186044415 MB</span><br><span class="line">   G1HeapRegionSize         &#x3D; 0 (0.0MB)</span><br><span class="line"></span><br><span class="line">Heap Usage:</span><br><span class="line">New Generation (Eden + 1 Survivor Space):</span><br><span class="line">   capacity &#x3D; 314048512 (299.5MB)</span><br><span class="line">   used     &#x3D; 248085416 (236.59268951416016MB)</span><br><span class="line">   free     &#x3D; 65963096 (62.907310485839844MB)</span><br><span class="line">   78.99588965414362% used</span><br></pre></td></tr></table></figure>
+<h3 id="数据量"><a href="#数据量" class="headerlink" title="数据量"></a>数据量</h3><p>本次测试的数据量通过如下命令获得：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl &#123;elasticsearch host&#125;/ult_index/_count</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"count"</span>:<span class="number">34232030</span>,<span class="attr">"_shards"</span>:&#123;<span class="attr">"total"</span>:<span class="number">1</span>,<span class="attr">"successful"</span>:<span class="number">1</span>,<span class="attr">"skipped"</span>:<span class="number">0</span>,<span class="attr">"failed"</span>:<span class="number">0</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>更多参数可见<a href="https://github.com/ultlog/ula/tree/master/benchmark/ela_config" target="_blank" rel="external nofollow noopener noreferrer">ula_config</a></p>
+<h2 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">files=$(ls /proc/sys/net/ipv4)</span><br><span class="line">for file in $files</span><br><span class="line">do</span><br><span class="line">  echo "$file" </span><br><span class="line">  cat "$1"/"$file"</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">cipso_cache_bucket_size</span><br><span class="line">10</span><br><span class="line">cipso_cache_enable</span><br><span class="line">1</span><br><span class="line">cipso_rbm_optfmt</span><br><span class="line">0</span><br><span class="line">cipso_rbm_strictvalid</span><br><span class="line">1</span><br><span class="line">conf</span><br><span class="line">icmp_echo_ignore_all</span><br><span class="line">0</span><br><span class="line">icmp_echo_ignore_broadcasts</span><br><span class="line">1</span><br><span class="line">icmp_errors_use_inbound_ifaddr</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+<p>更多参数可见<a href="https://github.com/ultlog/ula/tree/master/benchmark/ipv4_config" target="_blank" rel="external nofollow noopener noreferrer">ula_config</a></p>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><h2 id="测试工具"><a href="#测试工具" class="headerlink" title="测试工具"></a>测试工具</h2><p>本次测试选择apachbench进行测试，根据<a href="#前言">前言</a>中所写得到以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ab -n 500 -c 10 -g ula_test_output http://&#123;target&#125;/api/v1/log</span><br></pre></td></tr></table></figure>
+
+<h1 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h1><h2 id="测试报告"><a href="#测试报告" class="headerlink" title="测试报告"></a>测试报告</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">This is ApacheBench, Version 2.3 &lt;$Revision: 1874286 $&gt;</span><br><span class="line">Copyright 1996 Adam Twiss, Zeus Technology Ltd, http:&#x2F;&#x2F;www.zeustech.net&#x2F;</span><br><span class="line">Licensed to The Apache Software Foundation, http:&#x2F;&#x2F;www.apache.org&#x2F;</span><br><span class="line"></span><br><span class="line">Benchmarking &#123;target&#125; (be patient)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Server Software:        nginx&#x2F;1.17.1</span><br><span class="line">Server Hostname:        &#123;target&#125;</span><br><span class="line">Server Port:            80</span><br><span class="line"></span><br><span class="line">Document Path:          &#x2F;api&#x2F;v1&#x2F;log</span><br><span class="line">Document Length:        4186 bytes</span><br><span class="line"></span><br><span class="line">Concurrency Level:      10</span><br><span class="line">Time taken for tests:   6.133 seconds</span><br><span class="line">Complete requests:      500</span><br><span class="line">Failed requests:        0</span><br><span class="line">Total transferred:      2201000 bytes</span><br><span class="line">HTML transferred:       2093000 bytes</span><br><span class="line">Requests per second:    81.53 [#&#x2F;sec] (mean)</span><br><span class="line">Time per request:       122.660 [ms] (mean)</span><br><span class="line">Time per request:       12.266 [ms] (mean, across all concurrent requests)</span><br><span class="line">Transfer rate:          350.47 [Kbytes&#x2F;sec] received</span><br><span class="line"></span><br><span class="line">Connection Times (ms)</span><br><span class="line">              min  mean[+&#x2F;-sd] median   max</span><br><span class="line">Connect:        0    2   1.9      2      15</span><br><span class="line">Processing:    28  105  58.8     91     838</span><br><span class="line">Waiting:       27  102  58.1     88     821</span><br><span class="line">Total:         31  107  58.9     94     839</span><br><span class="line"></span><br><span class="line">Percentage of the requests served within a certain time (ms)</span><br><span class="line">  50%     94</span><br><span class="line">  66%    115</span><br><span class="line">  75%    128</span><br><span class="line">  80%    136</span><br><span class="line">  90%    180</span><br><span class="line">  95%    211</span><br><span class="line">  98%    243</span><br><span class="line">  99%    268</span><br><span class="line"> 100%    839 (longest request)</span><br></pre></td></tr></table></figure>
+
+<h2 id="输出结果"><a href="#输出结果" class="headerlink" title="输出结果"></a>输出结果</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">starttime	seconds	ctime	dtime	ttime	wait</span><br><span class="line">Wed Jul 29 18:39:46 2020	1596019186	3	28	31	27</span><br><span class="line">Wed Jul 29 18:39:47 2020	1596019187	2	35	37	35</span><br><span class="line">Wed Jul 29 18:39:43 2020	1596019183	1	36	37	35</span><br><span class="line">Wed Jul 29 18:39:43 2020	1596019183	5	33	38	30</span><br><span class="line">Wed Jul 29 18:39:43 2020	1596019183	1	37	38	34</span><br><span class="line">Wed Jul 29 18:39:45 2020	1596019185	1	38	39	37</span><br><span class="line">Wed Jul 29 18:39:47 2020	1596019187	5	34	39	34</span><br><span class="line">Wed Jul 29 18:39:46 2020	1596019186	1	39	40	38</span><br><span class="line">Wed Jul 29 18:39:43 2020	1596019183	2	38	40	38</span><br><span class="line">Wed Jul 29 18:39:45 2020	1596019185	9	31	40	28</span><br></pre></td></tr></table></figure>
+<p>更多可见<a href="https://github.com/ultlog/ula/tree/master/benchmark/ula_test_output" target="_blank" rel="external nofollow noopener noreferrer">ula_test_output</a></p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>由测试结果可知本次性能测试可以通过。</p>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+    
+        <a href="/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/ulu/ulu/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">ulu</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            will &copy; 2020 
+            <a rel="external nofollow noopener noreferrer" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" target="_blank" rel="external nofollow noopener noreferrer">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
