@@ -11,5 +11,5 @@ ultlog是一个日志收集，过滤，展示的系统。
 
 ....
 
-[了解更多](ultlog.com)
+[了解更多](http://ultlog.com)
 

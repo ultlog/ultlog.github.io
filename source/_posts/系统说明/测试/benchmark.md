@@ -127,6 +127,7 @@ icmp_errors_use_inbound_ifaddr
 本次测试选择apachbench进行测试，根据[前言](#前言)中所写得到以下命令：
 ````shell
 ab -n 500 -c 10 -g ula_test_output http://{target}/api/v1/log
+ab -n 500 -c 10 -g ula_test_with_param_output http://{target}/api/v1/log?offset=0"&"size=10"&"project={project}"&"module={module}"&"uuid={uuid}
 ````
 
 # 测试结果
@@ -177,6 +178,52 @@ Percentage of the requests served within a certain time (ms)
  100%    839 (longest request)
 
 ````
+````
+This is ApacheBench, Version 2.3 <$Revision: 1874286 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 172.18.11.142 (be patient)
+
+
+Server Software:        nginx/1.17.1
+Server Hostname:        {target}
+Server Port:            80
+
+Document Path:          /api/v1/log?offset=0&size=10&project={project}&module={module}&uuid={uuid}
+Document Length:        2292 bytes
+
+Concurrency Level:      10
+Time taken for tests:   15.176 seconds
+Complete requests:      500
+Failed requests:        0
+Total transferred:      1254000 bytes
+HTML transferred:       1146000 bytes
+Requests per second:    32.95 [#/sec] (mean)
+Time per request:       303.510 [ms] (mean)
+Time per request:       30.351 [ms] (mean, across all concurrent requests)
+Transfer rate:          80.70 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    2   2.2      1      25
+Processing:    96  299  99.4    284     650
+Waiting:       82  297  99.4    282     649
+Total:         99  300  99.5    285     666
+
+Percentage of the requests served within a certain time (ms)
+  50%    285
+  66%    330
+  75%    375
+  80%    390
+  90%    441
+  95%    479
+  98%    543
+  99%    571
+ 100%    666 (longest request)
+
+
+````
 
 ## 输出结果
 
@@ -195,6 +242,26 @@ Wed Jul 29 18:39:45 2020	1596019185	9	31	40	28
 ````
 更多可见[ula_test_output](https://github.com/ultlog/ula/tree/master/benchmark/ula_test_output)
 
+````
+starttime	seconds	ctime	dtime	ttime	wait
+Thu Jul 30 09:17:49 2020	1596071869	3	96	99	82
+Thu Jul 30 09:17:51 2020	1596071871	5	109	114	108
+Thu Jul 30 09:17:54 2020	1596071874	1	122	123	122
+Thu Jul 30 09:17:51 2020	1596071871	1	123	124	123
+Thu Jul 30 09:17:51 2020	1596071871	1	124	125	122
+Thu Jul 30 09:17:51 2020	1596071871	1	125	126	124
+Thu Jul 30 09:17:51 2020	1596071871	1	125	126	122
+Thu Jul 30 09:17:51 2020	1596071871	1	127	128	126
+Thu Jul 30 09:17:51 2020	1596071871	1	131	132	131
+Thu Jul 30 09:17:51 2020	1596071871	1	132	133	130
+Thu Jul 30 09:17:50 2020	1596071870	1	133	134	132
+Thu Jul 30 09:17:59 2020	1596071879	1	138	139	137
+Thu Jul 30 09:17:50 2020	1596071870	2	141	143	140
+Thu Jul 30 09:17:50 2020	1596071870	0	145	145	145
+Thu Jul 30 09:17:50 2020	1596071870	2	143	145	142
+Thu Jul 30 09:17:51 2020	1596071871	0	148	148	147
+````
+更多可见[ula_test_output](https://github.com/ultlog/ula/tree/master/benchmark/ula_test_with_param_output)
 # 结论
 
 由测试结果可知本次性能测试可以通过。
