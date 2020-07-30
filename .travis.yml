@@ -18,4 +18,3 @@ deploy:
     all_branches: true # solve a permission problem
   target_branch: master
   local-dir: public
-  fqdn: ultlog.com
