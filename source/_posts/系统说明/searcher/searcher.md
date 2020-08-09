@@ -34,13 +34,6 @@ at com.example.demo.DemoApplicationTests.contextLoads(DemoApplicationTests.java:
 ....
 ````
 
-### 选择软件包
-|  环境|   软件包 |
-| ------ | ------ | 
-| <  jdk 1.8 |[searcher_jdk.tar.gz]() | 
-| \>=  jdk 1.8 | [searcher.tar.gz]() | 
-| 无jdk | [searcher_jdk.tar.gz]() | 
-
 ### 手动/单机集成
 
 
