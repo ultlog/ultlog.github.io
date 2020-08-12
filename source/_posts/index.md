@@ -40,8 +40,8 @@ ulu为ultlog系统日志展示程序。可以通过系统名称，日志产生�
 
 [ula部署说明](/2020/07/26/系统说明/ula/ula/)
 [ulu部署说明](/2020/07/26/系统说明/ulu/ulu/)
-[collector部署说明](/2020/07/26/系统说明/collector/collector/)
-[searcher部署说明](/2020/07/26/系统说明/searcher/searcher/)
+[collector集成说明](/2020/07/26/系统说明/collector/collector/)
+[searcher集成说明](/2020/07/26/系统说明/searcher/searcher/)
 
 # 性能
 关于ultlog的性能可以查看[性能测试](/2020/07/29/系统说明/测试/benchmark/)章节。
