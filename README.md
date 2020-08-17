@@ -40,6 +40,8 @@ Compared with the original log system/framework, ultlog has the following advant
 
 ....
 
+## Thanks
+Thanks to [JetBrains](https://www.jetbrains.com/?from=ultlog.com) for their support during the development of ultlog
 
 ## More
 [中文文档](http://ultlog.com)
