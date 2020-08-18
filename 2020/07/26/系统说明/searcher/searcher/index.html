@@ -17,7 +17,7 @@
 <meta property="og:description" content="前言searcher 是ultlog系统中收集日志的一个程序。通过对系统中日志文件的监控，实时的将产生的日志发送到ula中。与collector不同，searcher不需要在工程中集成，转而在操作系统中集成。因此一些非基于logback的java项目（非常少）或非java项目也可以通过修改日志的格式而将日志托管给ultlog，享受ultlog带来的便利。 前置searcher使用java编写，因此">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-26T12:02:42.000Z">
-<meta property="article:modified_time" content="2020-08-03T13:52:57.003Z">
+<meta property="article:modified_time" content="2020-08-18T12:32:20.803Z">
 <meta property="article:author" content="will">
 <meta property="article:tag" content="searcher">
 <meta name="twitter:card" content="summary">
@@ -178,6 +178,15 @@
         
         
          <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            技术积累
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/08/16/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E4%BF%AE%E6%94%B9es%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B/">如何修改elasticsearch字段类型</a></li>  </ul> 
+                    </li> 
+                    
                     <li class="directory">
                         <a href="#" data-role="directory">
                             <i class="fa fa-folder"></i>
@@ -372,7 +381,7 @@
             
                 <div id="toc" class="toc-article">
                 <strong class="toc-title">文章目录</strong>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#前置"><span class="toc-number">2.</span> <span class="toc-text">前置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">3.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#程序配置"><span class="toc-number">3.1.</span> <span class="toc-text">程序配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选择软件包"><span class="toc-number">3.2.</span> <span class="toc-text">选择软件包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#手动-单机集成"><span class="toc-number">3.3.</span> <span class="toc-text">手动&#x2F;单机集成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#docker-linux"><span class="toc-number">3.3.1.</span> <span class="toc-text">docker linux</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#linux"><span class="toc-number">3.3.2.</span> <span class="toc-text">linux</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#windows"><span class="toc-number">3.3.3.</span> <span class="toc-text">windows</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自动集成实践"><span class="toc-number">3.4.</span> <span class="toc-text">自动集成实践</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#原DOCKERFILE"><span class="toc-number">3.4.1.</span> <span class="toc-text">原DOCKERFILE</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#改造后"><span class="toc-number">3.4.2.</span> <span class="toc-text">改造后</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置项说明"><span class="toc-number">3.5.</span> <span class="toc-text">配置项说明</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用配置文件"><span class="toc-number">3.5.1.</span> <span class="toc-text">使用配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#直接传参"><span class="toc-number">3.5.2.</span> <span class="toc-text">直接传参</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置实例"><span class="toc-number">3.5.3.</span> <span class="toc-text">配置实例</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#前置"><span class="toc-number">2.</span> <span class="toc-text">前置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">3.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#程序配置"><span class="toc-number">3.1.</span> <span class="toc-text">程序配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#手动-单机集成"><span class="toc-number">3.2.</span> <span class="toc-text">手动&#x2F;单机集成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#docker-linux"><span class="toc-number">3.2.1.</span> <span class="toc-text">docker linux</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#linux"><span class="toc-number">3.2.2.</span> <span class="toc-text">linux</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#windows"><span class="toc-number">3.2.3.</span> <span class="toc-text">windows</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自动集成实践"><span class="toc-number">3.3.</span> <span class="toc-text">自动集成实践</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#原DOCKERFILE"><span class="toc-number">3.3.1.</span> <span class="toc-text">原DOCKERFILE</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#改造后"><span class="toc-number">3.3.2.</span> <span class="toc-text">改造后</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置项说明"><span class="toc-number">3.4.</span> <span class="toc-text">配置项说明</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用配置文件"><span class="toc-number">3.4.1.</span> <span class="toc-text">使用配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#直接传参"><span class="toc-number">3.4.2.</span> <span class="toc-text">直接传参</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置实例"><span class="toc-number">3.4.3.</span> <span class="toc-text">配置实例</span></a></li></ol></li></ol></li></ol>
                 </div>
             
         
@@ -386,26 +395,6 @@
 <p>如果非logback项目或非java项目应将日志格式调整为如此：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2020-07-21 09:16:37 [ERROR] [pool-420-thread-7] c.t.g.h.HttpConnectionPoolUtil - test error</span><br><span class="line">java.lang.RuntimeException: test error</span><br><span class="line">at com.example.demo.DemoApplicationTests.contextLoads(DemoApplicationTests.java:21)</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
 
-<h3 id="选择软件包"><a href="#选择软件包" class="headerlink" title="选择软件包"></a>选择软件包</h3><table>
-<thead>
-<tr>
-<th>环境</th>
-<th>软件包</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>&lt;  jdk 1.8</td>
-<td><a href>searcher_jdk.tar.gz</a></td>
-</tr>
-<tr>
-<td>&gt;=  jdk 1.8</td>
-<td><a href>searcher.tar.gz</a></td>
-</tr>
-<tr>
-<td>无jdk</td>
-<td><a href>searcher_jdk.tar.gz</a></td>
-</tr>
-</tbody></table>
 <h3 id="手动-单机集成"><a href="#手动-单机集成" class="headerlink" title="手动/单机集成"></a>手动/单机集成</h3><h4 id="docker-linux"><a href="#docker-linux" class="headerlink" title="docker linux"></a>docker linux</h4><ul>
 <li>使用exec等命令进入docker镜像</li>
 <li>将下载好的软件包传入（可以在镜像内使用curl等命令进行下载）</li>

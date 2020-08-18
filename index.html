@@ -181,6 +181,15 @@
                         <a href="#" data-role="directory">
                             <i class="fa fa-folder"></i>
                             &nbsp;
+                            技术积累
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/08/16/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E4%BF%AE%E6%94%B9es%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B/">如何修改elasticsearch字段类型</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
                             版本变更
                         </a>
                          <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v0-0-1/">v0.0.1</a></li>  <li class="file"><a href="/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v1-0-0/">v1.0.0</a></li>  <li class="file"><a href="/2020/07/26/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/feature/">未来规划</a></li>  </ul> 
@@ -362,7 +371,7 @@
             
                 <div id="toc" class="toc-article">
                 <strong class="toc-title">文章目录</strong>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#架构"><span class="toc-number">2.</span> <span class="toc-text">架构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#日志数据流转"><span class="toc-number">2.1.</span> <span class="toc-text">日志数据流转</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#searcher"><span class="toc-number">2.2.</span> <span class="toc-text">searcher</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#collector"><span class="toc-number">2.3.</span> <span class="toc-text">collector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ula"><span class="toc-number">2.4.</span> <span class="toc-text">ula</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ulu"><span class="toc-number">2.5.</span> <span class="toc-text">ulu</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#开始使用"><span class="toc-number">3.</span> <span class="toc-text">开始使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#性能"><span class="toc-number">4.</span> <span class="toc-text">性能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#未来规划"><span class="toc-number">5.</span> <span class="toc-text">未来规划</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#架构"><span class="toc-number">2.</span> <span class="toc-text">架构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#日志数据流转"><span class="toc-number">2.1.</span> <span class="toc-text">日志数据流转</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#searcher"><span class="toc-number">2.2.</span> <span class="toc-text">searcher</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#collector"><span class="toc-number">2.3.</span> <span class="toc-text">collector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ula"><span class="toc-number">2.4.</span> <span class="toc-text">ula</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ulu"><span class="toc-number">2.5.</span> <span class="toc-text">ulu</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#开始使用"><span class="toc-number">3.</span> <span class="toc-text">开始使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#性能"><span class="toc-number">4.</span> <span class="toc-text">性能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#未来规划"><span class="toc-number">5.</span> <span class="toc-text">未来规划</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#感谢"><span class="toc-number">6.</span> <span class="toc-text">感谢</span></a></li></ol>
                 </div>
             
         
@@ -376,16 +385,17 @@
 <li>性能优越，单机ultlog以及单机elasticsearch服务可以轻松满足数十人团队，日均五十余万条日志的存储与查询。</li>
 </ul>
 <p><a href="#开始使用">开始使用</a></p>
-<h1 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h1><h2 id="日志数据流转"><a href="#日志数据流转" class="headerlink" title="日志数据流转"></a>日志数据流转</h2><img src="/2020/07/19/index/ultlog.png" class title="ultlog日志数据流转图:vi&#x2F;vim-cheat-sheet">
+<h1 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h1><h2 id="日志数据流转"><a href="#日志数据流转" class="headerlink" title="日志数据流转"></a>日志数据流转</h2><img src="/2020/07/19/index/ultlog.png" class title="ultlog日志数据流转图">
 
 <h2 id="searcher"><a href="#searcher" class="headerlink" title="searcher"></a>searcher</h2><p>searcher 是ultlog系统中收集日志的一个程序。通过对系统中日志文件的监控，实时的将产生的日志发送到ula中。<br>与<a href="https://github.com/ultlog/collector" target="_blank" rel="external nofollow noopener noreferrer">collector</a>不同，searcher不需要在工程中集成，转而在操作系统中集成。<br>因此一些非基于logback的java项目（非常少）或非java项目也可以通过修改日志的格式而将日志托管给ultlog，享受ultlog带来的便利。</p>
 <h2 id="collector"><a href="#collector" class="headerlink" title="collector"></a>collector</h2><p>collector是基于logback开发的日志收集组件，适用于使用logback日志框架的系统。collector通过对logback框架中的appender接口扩展而将收集到的日志发送到<a href="#ula">ula</a>系统。相比于searcher，<br>collector能够适应更改多变的日志格式，并且在部署时不需要编写额外的脚本。</p>
 <h2 id="ula"><a href="#ula" class="headerlink" title="ula"></a>ula</h2><p>ula为ultlog系统中的日志与网络请求处理服务，收集到的日志通过ula存储进Elasticsearch数据库，并且通过Restful风格的接口对外提供查询功能。</p>
 <h2 id="ulu"><a href="#ulu" class="headerlink" title="ulu"></a>ulu</h2><p>ulu为ultlog系统日志展示程序。可以通过系统名称，日志产生时间，日志信息等多个维度进行日志的查询。</p>
-<h1 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h1><p><a href="/2020/07/26/系统说明/ula/ula/">ula部署说明</a><br><a href="/2020/07/26/系统说明/ulu/ulu/">ulu部署说明</a><br><a href="/2020/07/26/系统说明/collector/collector/">collector部署说明</a><br><a href="/2020/07/26/系统说明/searcher/searcher/">searcher部署说明</a></p>
+<h1 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h1><p><a href="/2020/07/26/系统说明/ula/ula/">ula部署说明</a><br><a href="/2020/07/26/系统说明/ulu/ulu/">ulu部署说明</a><br><a href="/2020/07/26/系统说明/collector/collector/">collector集成说明</a><br><a href="/2020/07/26/系统说明/searcher/searcher/">searcher集成说明</a></p>
 <h1 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h1><p>关于ultlog的性能可以查看<a href="/2020/07/29/系统说明/测试/benchmark/">性能测试</a>章节。</p>
 <h1 id="未来规划"><a href="#未来规划" class="headerlink" title="未来规划"></a>未来规划</h1><p>更多新功能正在开发，欢迎通过<a href="/2020/07/26/版本变更/feature/">未来规划</a>查阅。</p>
-
+<h1 id="感谢"><a href="#感谢" class="headerlink" title="感谢"></a>感谢</h1><p><a href="https://www.jetbrains.com/?from=ultlog.com" target="_blank" rel="external nofollow noopener noreferrer"><img src="/2020/07/19/index/jetbrains.svg" class title="JetBrains"></a></p>
+<p align="center">感谢JetBrains在ultlog开发过程中提供的支持</p>
             </div>
         
         <footer class="article-footer">

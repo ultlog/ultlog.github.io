@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    
+    <title>如何修改elasticsearch字段类型 | ultlog</title>
+    
+    
+        <meta name="keywords" content="elasticsearch">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="背景在开发v1.1.0中的统计功能时发现ult_index索引中的字段不满足聚合查询的条件，当时是使用的开发时创建的elasticsearch索引，所以部分字段的类型存在问题。这个问题在v1.0.0版本中不会存在，通过ula部署说明可以创建正确的索引。此时的索引结构通过以下语句查询 12curl http:&#x2F;&#x2F;localhost:9200&#x2F;ult_index?pretty 得到的结果为  ult_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何修改elasticsearch字段类型">
+<meta property="og:url" content="http://ultlog.com/2020/08/16/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E4%BF%AE%E6%94%B9es%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="ultlog">
+<meta property="og:description" content="背景在开发v1.1.0中的统计功能时发现ult_index索引中的字段不满足聚合查询的条件，当时是使用的开发时创建的elasticsearch索引，所以部分字段的类型存在问题。这个问题在v1.0.0版本中不会存在，通过ula部署说明可以创建正确的索引。此时的索引结构通过以下语句查询 12curl http:&#x2F;&#x2F;localhost:9200&#x2F;ult_index?pretty 得到的结果为  ult_">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-16T12:59:42.000Z">
+<meta property="article:modified_time" content="2020-08-18T12:32:20.803Z">
+<meta property="article:author" content="will">
+<meta property="article:tag" content="elasticsearch">
+<meta name="twitter:card" content="summary">
+    
+
+    
+
+    
+        <link rel="icon" href="/images/favicon.ico">
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/open-sans/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    
+<script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="ultlog" type="application/atom+xml">
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">ultlog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>分类</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            技术积累
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file active"><a href="/2020/08/16/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E4%BF%AE%E6%94%B9es%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B/">如何修改elasticsearch字段类型</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            版本变更
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v0-0-1/">v0.0.1</a></li>  <li class="file"><a href="/2020/07/19/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/v1-0-0/">v1.0.0</a></li>  <li class="file"><a href="/2020/07/26/%E7%89%88%E6%9C%AC%E5%8F%98%E6%9B%B4/feature/">未来规划</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            系统说明
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            collector
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/collector/collector/">collector</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            searcher
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/searcher/searcher/">searcher</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            ula
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/ula/ula/">ula</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            ulu
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/07/26/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/ulu/ulu/">ulu</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            测试
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2020/07/29/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/%E6%B5%8B%E8%AF%95/benchmark/">性能测试</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     <li class="file"><a href="/2020/07/19/index/">ultlog</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-技术积累/修改es字段类型" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/">技术积累</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2020/08/16/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/%E4%BF%AE%E6%94%B9es%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B/">
+            <time datetime="2020-08-16T12:59:42.000Z" itemprop="datePublished">2020-08-16</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href="https://github.com/ultlog/ultlog.github.io/raw/master/source/_posts/技术积累/修改es字段类型.md" target="_blank" rel="external nofollow noopener noreferrer"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/ultlog/ultlog.github.io/edit/master/source/_posts/技术积累/修改es字段类型.md" target="_blank" rel="external nofollow noopener noreferrer"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/ultlog/ultlog.github.io/commits/master/source/_posts/技术积累/修改es字段类型.md" target="_blank" rel="external nofollow noopener noreferrer"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            如何修改elasticsearch字段类型
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">文章目录</strong>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#思路"><span class="toc-number"></span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#执行"><span class="toc-number"></span> <span class="toc-text">执行</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据迁移"><span class="toc-number">1.</span> <span class="toc-text">数据迁移</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除旧索引"><span class="toc-number">2.</span> <span class="toc-text">删除旧索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据迁回"><span class="toc-number">3.</span> <span class="toc-text">数据迁回</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后续问题"><span class="toc-number">4.</span> <span class="toc-text">后续问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number"></span> <span class="toc-text">其他</span></a>
+                </li></div>
+            
+        
+        
+            <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在开发v1.1.0中的统计功能时发现ult_index索引中的字段不满足聚合查询的条件，当时是使用的开发时创建的elasticsearch索引，所以部分字段的类型存在问题。这个问题在v1.0.0版本中不会存在，通过<a href="/2020/07/26/系统说明/ula/ula/">ula</a>部署说明可以创建正确的索引。<br>此时的索引结构通过以下语句查询</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">curl http://localhost:9200/ult_index?pretty</span><br></pre></td></tr></table></figure>
+<p>得到的结果为</p>
+<details>
+<summary>ult_index.json</summary>
+<pre><code>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"ult_index"</span> : &#123;</span><br><span class="line">    <span class="attr">"aliases"</span> : &#123; &#125;,</span><br><span class="line">    <span class="attr">"mappings"</span> : &#123;</span><br><span class="line">      <span class="attr">"properties"</span> : &#123;</span><br><span class="line">        <span class="attr">"acceptTime"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"long"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"createTime"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"long"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"level"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"text"</span>,</span><br><span class="line">          <span class="attr">"fields"</span> : &#123;</span><br><span class="line">            <span class="attr">"keyword"</span> : &#123;</span><br><span class="line">              <span class="attr">"type"</span> : <span class="string">"keyword"</span>,</span><br><span class="line">              <span class="attr">"ignore_above"</span> : <span class="number">256</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"message"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"text"</span>,</span><br><span class="line">          <span class="attr">"fields"</span> : &#123;</span><br><span class="line">            <span class="attr">"keyword"</span> : &#123;</span><br><span class="line">              <span class="attr">"type"</span> : <span class="string">"text"</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"module"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"text"</span>,</span><br><span class="line">          <span class="attr">"fields"</span> : &#123;</span><br><span class="line">            <span class="attr">"keyword"</span> : &#123;</span><br><span class="line">              <span class="attr">"type"</span> : <span class="string">"text"</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"project"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"text"</span>,</span><br><span class="line">          <span class="attr">"fields"</span> : &#123;</span><br><span class="line">            <span class="attr">"keyword"</span> : &#123;</span><br><span class="line">              <span class="attr">"type"</span> : <span class="string">"keyword"</span>,</span><br><span class="line">              <span class="attr">"ignore_above"</span> : <span class="number">256</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"stack"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"text"</span>,</span><br><span class="line">          <span class="attr">"fields"</span> : &#123;</span><br><span class="line">            <span class="attr">"keyword"</span> : &#123;</span><br><span class="line">              <span class="attr">"type"</span> : <span class="string">"text"</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"uuid"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"text"</span>,</span><br><span class="line">          <span class="attr">"fields"</span> : &#123;</span><br><span class="line">            <span class="attr">"keyword"</span> : &#123;</span><br><span class="line">              <span class="attr">"type"</span> : <span class="string">"keyword"</span>,</span><br><span class="line">              <span class="attr">"ignore_above"</span> : <span class="number">256</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"settings"</span> : &#123;</span><br><span class="line">      <span class="attr">"index"</span> : &#123;</span><br><span class="line">        <span class="attr">"creation_date"</span> : <span class="string">"1597066526478"</span>,</span><br><span class="line">        <span class="attr">"number_of_shards"</span> : <span class="string">"1"</span>,</span><br><span class="line">        <span class="attr">"number_of_replicas"</span> : <span class="string">"1"</span>,</span><br><span class="line">        <span class="attr">"uuid"</span> : <span class="string">"pSLksVk0SfavnrOV1OmeDQ"</span>,</span><br><span class="line">        <span class="attr">"version"</span> : &#123;</span><br><span class="line">          <span class="attr">"created"</span> : <span class="string">"7060299"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"provided_name"</span> : <span class="string">"ult_index"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p></p></code></pre><p></p>
+</details>
+其中的module字段应为keyword类型
+
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>翻了下elasticsearch的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html#updating-field-mappings" target="_blank" rel="external nofollow noopener noreferrer">文档</a>，其中一段写着</p>
+<blockquote>
+<p>…you can’t change the mapping or field type of an existing field. Changing an existing field could invalidate data that’s already indexed.</p>
+</blockquote>
+<p>虽然没法动态地进行修改，但是发现了<a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.0/docs-reindex.html" target="_blank" rel="external nofollow noopener noreferrer">重建索引</a>在7.x版本地使用，于是思路就清晰了。先创建一个新的类型正确地索引，将旧索引地数据使用reindex移动过去，再删掉原索引，使用正确地脚本创建一个同名地索引，最后将数据移动回去。</p>
+<h1 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT  -H 'Content-Type: application/json' localhost:9200/ult_index_temp -d@data.json</span><br></pre></td></tr></table></figure>
+<details>
+<summary>json.data</summary>
+<pre><code>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"mappings"</span> : &#123;</span><br><span class="line">      <span class="attr">"properties"</span> : &#123;</span><br><span class="line">        <span class="attr">"acceptTime"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"long"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"createTime"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"long"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"level"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"text"</span>,</span><br><span class="line">          <span class="attr">"fields"</span> : &#123;</span><br><span class="line">            <span class="attr">"keyword"</span> : &#123;</span><br><span class="line">              <span class="attr">"type"</span> : <span class="string">"keyword"</span>,</span><br><span class="line">              <span class="attr">"ignore_above"</span> : <span class="number">256</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"message"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"text"</span>,</span><br><span class="line">          <span class="attr">"fields"</span> : &#123;</span><br><span class="line">            <span class="attr">"keyword"</span> : &#123;</span><br><span class="line">              <span class="attr">"type"</span> : <span class="string">"text"</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"module"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"text"</span>,</span><br><span class="line">          <span class="attr">"fields"</span> : &#123;</span><br><span class="line">            <span class="attr">"keyword"</span> : &#123;</span><br><span class="line">              <span class="attr">"type"</span> : <span class="string">"keyword"</span>,</span><br><span class="line">              <span class="attr">"ignore_above"</span> : <span class="number">256</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"project"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"text"</span>,</span><br><span class="line">          <span class="attr">"fields"</span> : &#123;</span><br><span class="line">            <span class="attr">"keyword"</span> : &#123;</span><br><span class="line">              <span class="attr">"type"</span> : <span class="string">"keyword"</span>,</span><br><span class="line">              <span class="attr">"ignore_above"</span> : <span class="number">256</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"stack"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"text"</span>,</span><br><span class="line">          <span class="attr">"fields"</span> : &#123;</span><br><span class="line">            <span class="attr">"keyword"</span> : &#123;</span><br><span class="line">              <span class="attr">"type"</span> : <span class="string">"text"</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"uuid"</span> : &#123;</span><br><span class="line">          <span class="attr">"type"</span> : <span class="string">"text"</span>,</span><br><span class="line">          <span class="attr">"fields"</span> : &#123;</span><br><span class="line">            <span class="attr">"keyword"</span> : &#123;</span><br><span class="line">              <span class="attr">"type"</span> : <span class="string">"keyword"</span>,</span><br><span class="line">              <span class="attr">"ignore_above"</span> : <span class="number">256</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"settings"</span>:&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p></p></code></pre><p></p>
+</details>
+
+<h2 id="数据迁移"><a href="#数据迁移" class="headerlink" title="数据迁移"></a>数据迁移</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST &quot;localhost:9200&#x2F;_reindex&quot; -H &#39;Content-Type: application&#x2F;json&#39; -d&#39;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;source&quot;: &#123;</span><br><span class="line">    &quot;index&quot;: &quot;ult_index&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;dest&quot;: &#123;</span><br><span class="line">    &quot;index&quot;: &quot;ult_index_temp&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;&#39;</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除旧索引"><a href="#删除旧索引" class="headerlink" title="删除旧索引"></a>删除旧索引</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">curl -X DELETE "localhost:9200/ult_index"</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据迁回"><a href="#数据迁回" class="headerlink" title="数据迁回"></a>数据迁回</h2><p>重复以上步骤将数据迁移会ult_index索引</p>
+<h2 id="后续问题"><a href="#后续问题" class="headerlink" title="后续问题"></a>后续问题</h2><p>重新构建好索引后发现依旧抛出异常</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">2020-08-15 20:29:53.505 [http-nio-8080-exec-2] ERROR o.a.c.c.C.[.[localhost].[&#x2F;].[dispatcherServlet] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is ElasticsearchStatusException[Elasticsearch exception [type&#x3D;search_phase_execution_exception, reason&#x3D;all shards failed]]; nested: ElasticsearchException[Elasticsearch exception [type&#x3D;illegal_argument_exception, reason&#x3D;Text fields are not optimised for operations that require per-document field data like aggregations and sorting, so these operations are disabled by default. Please use a keyword field instead. Alternatively, set fielddata&#x3D;true on [module] in order to load field data by uninverting the inverted index. Note that this can use significant memory.]]; nested: ElasticsearchException[Elasticsearch exception [type&#x3D;illegal_argument_exception, reason&#x3D;Text fields are not optimised for operations that require per-document field data like aggregations and sorting, so these operations are disabled by default. Please use a keyword field instead. Alternatively, set fielddata&#x3D;true on [module] in order to load field data by uninverting the inverted index. Note that this can use significant memory.]];] with root cause</span><br><span class="line">org.elasticsearch.ElasticsearchException: Elasticsearch exception [type&#x3D;illegal_argument_exception, reason&#x3D;Text fields are not optimised for operations that require per-document field data like aggregations and sorting, so these operations are disabled by default. Please use a keyword field instead. Alternatively, set fielddata&#x3D;true on [module] in order to load field data by uninverting the inverted index. Note that this can use significant memory.]</span><br><span class="line">	at org.elasticsearch.ElasticsearchException.innerFromXContent(ElasticsearchException.java:491)</span><br><span class="line">	at org.elasticsearch.ElasticsearchException.fromXContent(ElasticsearchException.java:402)</span><br><span class="line">	at org.elasticsearch.ElasticsearchException.innerFromXContent(ElasticsearchException.java:432)</span><br><span class="line">	at org.elasticsearch.ElasticsearchException.fromXContent(ElasticsearchException.java:402)</span><br><span class="line">	at org.elasticsearch.ElasticsearchException.innerFromXContent(ElasticsearchException.java:432)</span><br><span class="line">	at org.elasticsearch.ElasticsearchException.failureFromXContent(ElasticsearchException.java:598)</span><br><span class="line">	at org.elasticsearch.rest.BytesRestResponse.errorFromXContent(BytesRestResponse.java:169)</span><br><span class="line">	at org.elasticsearch.client.RestHighLevelClient.parseEntity(RestHighLevelClient.java:1721)</span><br><span class="line">	at org.elasticsearch.client.RestHighLevelClient.parseResponseException(RestHighLevelClient.java:1698)</span><br><span class="line">	at org.elasticsearch.client.RestHighLevelClient.internalPerformRequest(RestHighLevelClient.java:1461)</span><br><span class="line">	at org.elasticsearch.client.RestHighLevelClient.performRequest(RestHighLevelClient.java:1418)</span><br><span class="line">	at org.elasticsearch.client.RestHighLevelClient.performRequestAndParseEntity(RestHighLevelClient.java:1388)</span><br><span class="line">	at org.elasticsearch.client.RestHighLevelClient.search(RestHighLevelClient.java:930)</span><br><span class="line">	at com.ultlog.ula.service.impl.StatisticServiceImpl.getProjectStatisticByModuleAndTime(StatisticServiceImpl.java:69)</span><br><span class="line">	at com.ultlog.ula.controller.StatisticController.getStatisticByProjectAndDate(StatisticController.java:44)</span><br><span class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</span><br><span class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)</span><br><span class="line">	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)</span><br><span class="line">	at java.lang.reflect.Method.invoke(Method.java:498)</span><br><span class="line">	.....</span><br></pre></td></tr></table></figure>
+
+<p>翻了下文档发现执行以下命令即可，这个命令也将添加再v1.1.0版本的安装说明中。相关的说明可见<a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.x/fielddata.html#fielddata-disabled-text-fields" target="_blank" rel="external nofollow noopener noreferrer">官方文档</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X PUT "localhost:9200/megacorp/_mapping?pretty" -H 'Content-Type: application/json' -d'&#123;"properties": &#123;"module": &#123; "type":"text","fielddata": true&#125;&#125;&#125;'</span><br></pre></td></tr></table></figure>
+
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>elasticsearch的官方文档是真的好用</p>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+    
+        <a href="/2020/07/29/%E7%B3%BB%E7%BB%9F%E8%AF%B4%E6%98%8E/%E6%B5%8B%E8%AF%95/benchmark/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">性能测试</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            will &copy; 2020 
+            <a rel="external nofollow noopener noreferrer" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" target="_blank" rel="external nofollow noopener noreferrer">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
